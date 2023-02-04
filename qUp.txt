@@ -1,0 +1,8 @@
+What's the definition of the *safety* and the liveness property in DistSys?
+(http://188.166.160.44:45818/slides/TK1/sync-36.png)
+
+What are the properties of *consistent global cuts*?
+(http://188.166.160.44:45818/slides/TK1/sync-38.png)
+
+What was the idea and the assumption for the Chandy-Lamport algorithm?
+(http://188.166.160.44:45818/slides/TK1/sync-39.png)
