@@ -4,10 +4,12 @@ from pathlib import Path
 import logging
 import pytz
 from datetime import datetime as dt
+import datetime
 import argparse
 import sys
 from random import choice
 from time import sleep
+from random import randint
 
 
 def parse_args(argv):
@@ -33,28 +35,28 @@ def parse_args(argv):
     parser.add_argument(
         "--BEGIN",
         help="push questions beginning at this hour. 0-23",
-        type=str,
+        type=int,
         required=True,
     )
 
     parser.add_argument(
         "--END",
         help="push questions ending at this hour. 0-23",
-        type=str,
+        type=int,
         required=True,
     )
 
     parser.add_argument(
         "--PERIOD",
         help="push questions every PERIOD minutes. 1-60",
-        type=str,
+        type=int,
         required=True,
     )
 
     parser.add_argument(
         "--QUESTIONS_DIR",
         help="path to directory containing questions txt files",
-        type=str,
+        type=Path,
         required=True,
     )
 
@@ -109,9 +111,9 @@ def schedule_push(period: int) -> dt:
     # get the current time
     now = berlin_now()
     # 15% random time deviation
-    deviation = randint(int(-period * 0.15), int(period * 0.15))
+    deviation = randint(int(period * 0.15), int(period * 0.15))
     # return datetime object
-    next_push = now + dt.timedelta(minutes=period + deviation)
+    next_push = now + datetime.timedelta(minutes=period + deviation)
     return next_push
 
 
@@ -122,19 +124,12 @@ def select_question(q_dir: Path) -> str:
     question_file_path = choice(list(q_dir.glob("*.txt")))
 
     # pick a random line from file
+    question = choice(question_file_path.read_text().split("\n\n"))
 
     return question
 
 
-###################
-#      MAIN       #
-###################
-
-
-def main(argv):
-    # parse args
-    args = parse_args(argv)
-
+def run(args):
     # schedule first push
     next_push = schedule_push(args.PERIOD)
 
@@ -161,5 +156,17 @@ def main(argv):
             break
 
 
+###################
+#      MAIN       #
+###################
+
+
+def main():
+    # parse args
+    args = parse_args(sys.argv)
+    # run the program
+    sys.exit(run(args))
+
+
 if __name__ == "__main__":
-    sys.exit(main(sys.argv))
+    main()
