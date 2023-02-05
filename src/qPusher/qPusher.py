@@ -141,7 +141,10 @@ def run(args):
                 # select a question
                 question = select_question(args.QUESTIONS_DIR)
                 # push the question
-                push(question, args.APP_TOKEN, args.USER_KEY)
+                try:
+                    push(question, args.APP_TOKEN, args.USER_KEY)
+                except Exception as e:
+                    logging.error(f"Push failed: {e}")
                 # schedule next push
                 next_push = schedule_push(args.PERIOD)
 
