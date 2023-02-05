@@ -111,7 +111,7 @@ def schedule_push(period: int) -> dt:
     # get the current time
     now = berlin_now()
     # 15% random time deviation
-    deviation = randint(int(period * 0.15), int(period * 0.15))
+    deviation = randint(int(-period * 0.15), int(period * 0.15))
     # return datetime object
     next_push = now + datetime.timedelta(minutes=period + deviation)
     return next_push
