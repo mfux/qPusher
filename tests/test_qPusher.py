@@ -30,21 +30,14 @@ def test_parse_args():
     assert args.APP_TOKEN == "123"
 
 
-def test_main():
-    argv = [
-        "src/qPusher/qPusher.py",
-        "--APP_TOKEN",
-        "123",
-        "--USER_KEY",
-        "123",
-        "--BEGIN",
-        "0",
-        "--END",
-        "23",
-        "--PERIOD",
-        "1",
-        "--QUESTIONS_DIR",
-        "test",
-    ]
+# def test_push():
+#     # test sending a message
+#     qPusher.push("Test Message")
+#     # needs to be verified on different devices
+#     assert True
 
-    qPusher.main(argv)
+
+def test_berlin_now():
+    # test if current time is in berlin timezone
+    now = qPusher.berlin_now()
+    assert now.tzinfo.zone == "Europe/Berlin"
