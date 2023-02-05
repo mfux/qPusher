@@ -1,66 +1,107 @@
-import http.client, urllib
-import datetime as dt
-import pytz
-from time import sleep
-from random import randint, choice
 import os
+import http.client, urllib
+from pathlib import Path
+import logging
+import pytz
+from datetime import datetime as dt
+import argparse
+import sys
+from random import choice
+from time import sleep
 
-#################
-# CONFIGURATION #
-#################
 
-# pushOVER app access data
-APP_TOKEN = 'ahi3s16dbk89fs7hv2tkxaaomvxgaa'
-USER_KEY_MAX = 'udzgnk8o6p349vwctj6qvi4c5f7eo6'
-USER_KEY_STEFFEN = 'uh4xyaumaoffv26hpb64s3j2vvprp3'
+def parse_args(argv):
+    """
+    Runtime args parser
+    """
+    parser = argparse.ArgumentParser("""Runtime args controlling the qPusher""")
 
-# path to stored questions
-qPATH_MAX = '/home/maximilian/data/questions/'
-qPATH_STEFFEN = '/home/maximilian/data/steffen_questions/'
+    parser.add_argument(
+        "--APP_TOKEN",
+        help="pushOVER app token",
+        type=str,
+        required=True,
+    )
 
-# push questions between these times
-BEGIN = 9  # 09:00
-END = 22   # 22:00
+    parser.add_argument(
+        "--USER_KEY",
+        help="pushOVER user key",
+        type=str,
+        required=True,
+    )
 
-# push a question every ... minutes
-PERIOD = 45
+    parser.add_argument(
+        "--BEGIN",
+        help="push questions beginning at this hour. 0-23",
+        type=str,
+        required=True,
+    )
+
+    parser.add_argument(
+        "--END",
+        help="push questions ending at this hour. 0-23",
+        type=str,
+        required=True,
+    )
+
+    parser.add_argument(
+        "--PERIOD",
+        help="push questions every PERIOD minutes. 1-60",
+        type=str,
+        required=True,
+    )
+
+    parser.add_argument(
+        "--QUESTIONS_DIR",
+        help="path to directory containing questions txt files",
+        type=str,
+        required=True,
+    )
+
+    args = parser.parse_args(argv[1:])
+
+    return args
+
 
 ##################
 #   FUNCTIONS    #
 ##################
 
-def berlin_now():
-    berlin_tz = pytz.timezone("Europe/Berlin")
-    utc_now = pytz.utc.localize(dt.datetime.utcnow())
-    berlin_now = utc_now.astimezone(berlin_tz)
-    return berlin_now
+
+def berlin_now() -> dt:
+    """Returns the current time in Berlin timezone"""
+    return dt.now(tz=pytz.timezone("Europe/Berlin"))
 
 
-# sending a push msg (copied from pushit website)
-def push(msg, brother):
-    if brother == 'steffen':
-        user_key = USER_KEY_STEFFEN
-    else:
-        user_key = USER_KEY_MAX
-
-    print(berlin_now().strftime('%H:%M:%S'))
+def push(msg: str, app_token: str, user_key: str) -> None:
+    """Sends a message to the Pushover API"""
     conn = http.client.HTTPSConnection("api.pushover.net:443")
-    conn.request("POST", "/1/messages.json",
-      urllib.parse.urlencode({
-        "token": APP_TOKEN,
-        "user": user_key,
-        "message": msg,
-      }), {"Content-type": "application/x-www-form-urlencoded"})
-    return conn.getresponse()
+    conn.request(
+        "POST",
+        "/1/messages.json",
+        urllib.parse.urlencode(
+            {
+                "token": app_token,
+                "user": user_key,
+                "message": msg,
+            }
+        ),
+        {"Content-type": "application/x-www-form-urlencoded"},
+    )
+    conn.getresponse()
+    # log message
+    logging.info(f"Pushed message: {msg} at {berlin_now().strftime('%H:%M:%S')}")
 
-# check whether current time is inside of boundaries
-def time_is_appropriate():
+
+def time_is_appropriate(begin: int, end: int) -> bool:
+    """Checks if current time is inside of defined boundaries"""
     # get the current time
     now = berlin_now()
-    # return True/False whether time  is inside of defined boundaries
-    return now.hour >= BEGIN and now.hour < END
+    # return True/False whether time is inside of defined boundaries
+    return now.hour >= begin and now.hour < end
 
-def schedule_push():
+
+def schedule_push(period: int) -> dt:
     """
     Calculate a datetime Object that points to
     the time in x minutes with some deviation
@@ -68,48 +109,57 @@ def schedule_push():
     # get the current time
     now = berlin_now()
     # 15% random time deviation
-    deviation = randint(int(-PERIOD * 0.15), int(PERIOD * 0.15))
+    deviation = randint(int(-period * 0.15), int(period * 0.15))
     # return datetime object
-    next_push = now + dt.timedelta(minutes=PERIOD+deviation)
+    next_push = now + dt.timedelta(minutes=period + deviation)
     return next_push
 
-def select_question(brother):
-    """Picks a Random question from the Question Directory"""
-    if brother == 'steffen':
-        qpath = qPATH_STEFFEN
-    else:
-        qpath = qPATH_MAX
-    # pick a random file from directory
-    question_path = choice([qpath + name for name in os.listdir(qpath)
-                            if os.path.isfile(qpath + name)])
 
-    # read question from file and return
-    with open(question_path, 'r') as f:
-        question = f.read()
+def select_question(q_dir: Path) -> str:
+    """Picks a Random question from the Question Directory"""
+
+    # pick a random file from directory
+    question_file_path = choice(list(q_dir.glob("*.txt")))
+
+    # pick a random line from file
 
     return question
+
 
 ###################
 #      MAIN       #
 ###################
 
-# schedule the next push
-next_push = schedule_push()
-# push(select_question('max'), 'max')
-# push(select_question('steffen'), 'steffen')
 
-# run forever
-while True:
-    # get current time
-    now = berlin_now()
+def main(argv):
+    # parse args
+    args = parse_args(argv)
 
-    # if the next push is due
-    if now >= next_push:
-        if time_is_appropriate():
-            # select and send a question
-            push(select_question('max'), 'max')
-        # schedule the next push
-        next_push = schedule_push()
+    # schedule first push
+    next_push = schedule_push(args.PERIOD)
 
-    # sleep 1 second
-    sleep(1)
+    # start loop
+    while True:
+        try:
+            # if next push is due and time is appropriate
+            if berlin_now() >= next_push and time_is_appropriate(args.BEGIN, args.END):
+                # select a question
+                question = select_question(args.QUESTIONS_DIR)
+                # push the question
+                push(question, args.APP_TOKEN, args.USER_KEY)
+                # schedule next push
+                next_push = schedule_push(args.PERIOD)
+
+            # calculate time to sleep
+            sleep_time = (next_push - berlin_now()).total_seconds()
+            # sleep
+            sleep(sleep_time)
+
+        # break on keyboard interrupt and end program
+        except KeyboardInterrupt:
+            logging.info("Keyboard Interrupt. Exiting...")
+            break
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))
