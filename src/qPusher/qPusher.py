@@ -22,14 +22,16 @@ def parse_args(argv):
         "--APP_TOKEN",
         help="pushOVER app token",
         type=str,
-        required=True,
+        required=False,
+        default=os.environ.get("APP_TOKEN"),
     )
 
     parser.add_argument(
         "--USER_KEY",
         help="pushOVER user key",
         type=str,
-        required=True,
+        required=False,
+        default=os.environ.get("USER_KEY"),
     )
 
     parser.add_argument(
