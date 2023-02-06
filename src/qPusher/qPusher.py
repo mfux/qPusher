@@ -151,7 +151,7 @@ def run(args):
             # calculate time to sleep
             sleep_time = (next_push - berlin_now()).total_seconds()
             # sleep
-            sleep(sleep_time)
+            sleep(max(sleep_time, 0))
 
         # break on keyboard interrupt and end program
         except KeyboardInterrupt:
