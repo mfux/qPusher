@@ -1,5 +1,6 @@
 from qPusher import qPusher
 import argparse
+import os
 
 
 def test_parse_args():
@@ -30,11 +31,20 @@ def test_parse_args():
     assert args.APP_TOKEN == "123"
 
 
-# def test_push():
-#     # test sending a message
-#     qPusher.push("Test Message")
-#     # needs to be verified on different devices
-#     assert True
+def test_push():
+    app_token = os.environ.get("APP_TOKEN")
+    user_key = os.environ.get("USER_KEY")
+    if not app_token or not user_key:
+        print("environment variables APP_TOKEN or USER_KEY not set")
+        assert False
+    # test sending a message
+    qPusher.push(
+        "Test Message",
+        app_token="ahi3s16dbk89fs7hv2tkxaaomvxgaa",
+        user_key="udzgnk8o6p349vwctj6qvi4c5f7eo6",
+    )
+    # needs to be verified on different devices
+    assert True
 
 
 def test_berlin_now():
