@@ -12,7 +12,7 @@ from time import sleep
 from random import randint
 
 
-def parse_args(argv):
+def parse_args(argv: list) -> argparse.Namespace:
     """
     Runtime args parser
     """
@@ -97,25 +97,26 @@ def push(msg: str, app_token: str, user_key: str) -> None:
     logging.info(f"Pushed message: {msg} at {berlin_now().strftime('%H:%M:%S')}")
 
 
-def time_is_appropriate(begin: int, end: int) -> bool:
+def time_is_appropriate(begin: int, end: int, scheduled_push: dt) -> bool:
     """Checks if current time is inside of defined boundaries"""
-    # get the current time
-    now = berlin_now()
     # return True/False whether time is inside of defined boundaries
-    return now.hour >= begin and now.hour < end
+    return scheduled_push.hour >= begin and scheduled_push.hour < end
 
 
-def schedule_push(period: int) -> dt:
+def schedule_push(args: argparse.Namespace, last_push: dt) -> dt:
     """
     Calculate a datetime Object that points to
     the time in x minutes with some deviation
     """
-    # get the current time
-    now = berlin_now()
+    # get period from args
+    period = args.PERIOD
     # 15% random time deviation
     deviation = randint(int(-period * 0.15), int(period * 0.15))
-    # return datetime object
-    next_push = now + datetime.timedelta(minutes=period + deviation)
+    # calculate next push
+    next_push = last_push + datetime.timedelta(minutes=period + deviation)
+    # if next push is not within appropriate time boundaries, calculate next push
+    while not time_is_appropriate(args.BEGIN, args.END, next_push):
+        next_push = next_push + datetime.timedelta(minutes=period + deviation)
     return next_push
 
 
@@ -148,7 +149,7 @@ def run(args):
                 except Exception as e:
                     logging.error(f"Push failed: {e}")
                 # schedule next push
-                next_push = schedule_push(args.PERIOD)
+                next_push = schedule_push(args, berlin_now())
 
             # calculate time to sleep
             sleep_time = (next_push - berlin_now()).total_seconds()
