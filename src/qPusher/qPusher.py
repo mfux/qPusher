@@ -140,7 +140,9 @@ def run(args):
     while True:
         try:
             # if next push is due and time is appropriate
-            if berlin_now() >= next_push and time_is_appropriate(args.BEGIN, args.END):
+            if berlin_now() >= next_push and time_is_appropriate(
+                args.BEGIN, args.END, next_push
+            ):
                 # select a question
                 question = select_question(args.QUESTIONS_DIR)
                 # push the question
