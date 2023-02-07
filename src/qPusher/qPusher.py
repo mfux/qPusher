@@ -134,7 +134,7 @@ def select_question(q_dir: Path) -> str:
 
 def run(args):
     # schedule first push
-    next_push = schedule_push(args.PERIOD)
+    next_push = schedule_push(args.PERIOD, berlin_now())
 
     # start loop
     while True:
