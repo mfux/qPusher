@@ -127,7 +127,9 @@ def select_question(q_dir: Path) -> str:
     question_file_path = choice(list(q_dir.glob("*.txt")))
 
     # pick a random line from file
-    question = choice(question_file_path.read_text().split("\n\n"))
+    question = choice(
+        [q.strip() for q in question_file_path.read_text().split("\n\n") if q]
+    )
 
     return question
 
