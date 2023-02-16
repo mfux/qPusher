@@ -114,7 +114,7 @@ def schedule_push(args: argparse.Namespace, last_push: dt) -> dt:
     deviation = randint(int(-period * 0.15), int(period * 0.15))
     # calculate next push
     next_push = last_push + datetime.timedelta(minutes=period + deviation)
-    # if next push is not within appropriate time boundaries, calculate next push
+    # increase time to next push until time is appropriate
     while not time_is_appropriate(args.BEGIN, args.END, next_push):
         next_push = next_push + datetime.timedelta(minutes=period + deviation)
     return next_push
@@ -143,7 +143,7 @@ def run(args):
         try:
             # if next push is due and time is appropriate
             if berlin_now() >= next_push and time_is_appropriate(
-                args.BEGIN, args.END, next_push
+                args.BEGIN, args.END, berlin_now()
             ):
                 # select a question
                 question = select_question(args.QUESTIONS_DIR)
