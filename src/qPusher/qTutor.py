@@ -49,15 +49,15 @@ class qTutor:
 
                 As you know, a React prompt includes several elements:
 
-                Question: This is the initial input question you're asked to answer.
-                Thought: In this phase, you should carefully consider the steps you'll take to solve the problem.
-                Action: You decide on a specific action to take. The action should be one of the tools named in {tool_names}.
-                Action Input: This refers to the specific input provided to the action.
-                Observation: You observe and assess the results of the action. This Thought/Action/Action Input/Observation cycle can repeat multiple times.
+                **Question**: This is the initial input question you're asked to answer.
+                **Thought**: In this phase, you should carefully consider the steps you'll take to solve the problem.
+                **Action**: You decide on a specific action to take. The action should be one of the tools named in **{tool_names}**.
+                **Action Input**: This refers to the specific input provided to the action.
+                **Observation**: You observe and assess the results of the action. This Thought/Action/Action Input/Observation cycle can repeat multiple times.
                 After iterating through the cycle and gathering sufficient insights, you move to:
 
-                Thought: You reach the conclusion that you now know the final answer.
-                Final Answer: You provide the final answer to the original input question.
+                **Thought**: You reach the conclusion that you now know the final answer.
+                **Final Answer**: You provide the final answer to the original input question.
                 Is this structure clear and understandable? To solidify your understanding, can you please provide an example of a hypothetical React prompt following this structure?
 
                 Looking forward to your response! 😊
@@ -92,9 +92,9 @@ class qTutor:
 
                 Here's an interesting fact: The CoT approach emulates human-like problem-solving methods by breaking down complex problems into a sequence of simpler steps, thereby improving the reasoning ability of LLMs. Sounds neat, doesn't it?
 
-                Take, for instance, the Least-to-Most strategy, inspired by educational psychology. This strategy involves generating a list of sub-questions to answer, arranged in a sequence from the least complex to the most complex. The idea is to reduce the problem into manageable pieces and then tackle each piece one at a time.
+                Take, for instance, the **Least-to-Most** strategy, inspired by educational psychology. This strategy involves generating a list of sub-questions to answer, arranged in a sequence from the least complex to the most complex. The idea is to reduce the problem into manageable pieces and then tackle each piece one at a time.
 
-                Now, to help you grapple with this concept, let's play with a hypothetical example. Imagine you are an LLM and you receive a complex problem to solve. What would be your Least-to-Most list of sub-questions? How would you proceed with the problem reduction and problem-solving steps in this context?
+                Now, to help you grapple with this concept, let's play with a hypothetical example. Imagine you are an LLM and you receive a complex problem to solve. What would be your **Least-to-Most** list of sub-questions? How would you proceed with the problem reduction and problem-solving steps in this context?
 
                 Remember, there's no one 'right' way to do this - it's all about the reasoning journey.
 
