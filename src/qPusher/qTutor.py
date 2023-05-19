@@ -113,7 +113,7 @@ Your Guide in the Code Wilderness 🌳"""
 
         messages = [self.system_prompt] + training_messages + [user_message]
 
-        result = utils.call_api(messages, temperature=0)
+        result = utils.call_api(messages, temperature=0.5)
 
         return result
 
