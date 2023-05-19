@@ -10,6 +10,7 @@ import sys
 from random import choice
 from time import sleep
 from random import randint
+import markdown
 
 
 def parse_args(argv: list) -> argparse.Namespace:
@@ -62,6 +63,14 @@ def parse_args(argv: list) -> argparse.Namespace:
         required=True,
     )
 
+    parser.add_argument(
+        "--markdown",
+        help="converts the question to markdown",
+        type=bool,
+        required=False,
+        default=False,
+    )
+
     args = parser.parse_args(argv[1:])
 
     return args
@@ -79,6 +88,10 @@ def berlin_now() -> dt:
 
 def push(msg: str, app_token: str, user_key: str) -> None:
     """Sends a message to the Pushover API"""
+
+    # convert message from markdown to html
+    msg = markdown.markdown(msg)
+
     conn = http.client.HTTPSConnection("api.pushover.net:443")
     conn.request(
         "POST",
@@ -88,6 +101,7 @@ def push(msg: str, app_token: str, user_key: str) -> None:
                 "token": app_token,
                 "user": user_key,
                 "message": msg,
+                "html": "1",
             }
         ),
         {"Content-type": "application/x-www-form-urlencoded"},
@@ -120,7 +134,7 @@ def schedule_push(args: argparse.Namespace, last_push: dt) -> dt:
     return next_push
 
 
-def select_question(q_dir: Path) -> str:
+def select_question(q_dir: Path, bool: markdown) -> str:
     """Picks a Random question from the Question Directory"""
 
     # pick a random file from directory
@@ -130,6 +144,10 @@ def select_question(q_dir: Path) -> str:
     question = choice(
         [q.strip() for q in question_file_path.read_text().split("\n\n") if q]
     )
+    if markdown:
+        question = choice(
+            [q.strip() for q in question_file_path.read_text().split("---") if q]
+        )
 
     return question
 
@@ -138,15 +156,19 @@ def run(args):
     # schedule first push
     next_push = schedule_push(args, berlin_now())
 
+    # mark first run
+    first_run = True
+
     # start loop
     while True:
         try:
             # if next push is due and time is appropriate
-            if berlin_now() >= next_push and time_is_appropriate(
-                args.BEGIN, args.END, berlin_now()
-            ):
+            if (
+                berlin_now() >= next_push
+                and time_is_appropriate(args.BEGIN, args.END, berlin_now())
+            ) or first_run:
                 # select a question
-                question = select_question(args.QUESTIONS_DIR)
+                question = select_question(args.QUESTIONS_DIR, args.markdown)
                 # push the question
                 try:
                     push(question, args.APP_TOKEN, args.USER_KEY)
@@ -156,7 +178,11 @@ def run(args):
                 next_push = schedule_push(args, berlin_now())
 
             # calculate time to sleep
-            sleep_time = (next_push - berlin_now()).total_seconds()
+            sleep_time = (next_push - berlin_now()).total_seconds()  #
+
+            # mark first run as done
+            first_run = False
+
             # sleep
             sleep(max(sleep_time, 0))
 
