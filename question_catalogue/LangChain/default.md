@@ -129,7 +129,7 @@ It uses the ReAct framework to decide which tool to use, and uses memory to reme
 Tools are functions that agents can use to interact with the world.
 These tools can be generic utilities (e.g. search), other chains, or even other agents.
 
-Below is are examples of supported tools
+Below are examples of supported tools
 
 **python_repl**
 
@@ -152,7 +152,7 @@ Below is are examples of supported tools
 Tools are functions that agents can use to interact with the world.
 These tools can be generic utilities (e.g. search), other chains, or even other agents.
 
-Below is are examples of supported tools
+Below are examples of supported tools
 
 **wolfram-alpha**
 
@@ -176,7 +176,7 @@ Below is are examples of supported tools
 Tools are functions that agents can use to interact with the world.
 These tools can be generic utilities (e.g. search), other chains, or even other agents.
 
-Below is are examples of supported tools
+Below are examples of supported tools
 
 **wolfram-alpha**
 
@@ -200,7 +200,7 @@ Below is are examples of supported tools
 Tools are functions that agents can use to interact with the world.
 These tools can be generic utilities (e.g. search), other chains, or even other agents.
 
-Below is are examples of supported tools
+Below are examples of supported tools
 
 **terminal**
 
@@ -217,3 +217,126 @@ Below is are examples of supported tools
 - Requires LLM: Yes
 
 ---
+
+## Agent Tools
+
+Tools are functions that agents can use to interact with the world.
+These tools can be generic utilities (e.g. search), other chains, or even other agents.
+
+Below are examples of supported tools
+
+**llm-math**
+
+- Tool Name: Calculator
+- Tool Description: Useful for when you need to answer questions about math.
+- Notes: An instance of the `LLMMath` chain.
+- Requires LLM: Yes
+
+**open-meteo-api**
+
+- Tool Name: Open Meteo API
+- Tool Description: Useful for when you want to get weather information from the OpenMeteo API. The input should be a question in natural language that this API can answer.
+- Notes: A natural language connection to the Open Meteo API (`https://api.open-meteo.com/`), specifically the `/v1/forecast` endpoint.
+- Requires LLM: Yes
+
+---
+
+## Agent Tools
+
+Tools are functions that agents can use to interact with the world.
+These tools can be generic utilities (e.g. search), other chains, or even other agents.
+
+Below are examples of supported tools
+
+**news-api**
+
+- Tool Name: News API
+- Tool Description: Use this when you want to get information about the top headlines of current news stories. The input should be a question in natural language that this API can answer.
+- Notes: A natural language connection to the News API (`https://newsapi.org`), specifically the `/v2/top-headlines` endpoint.
+- Requires LLM: Yes
+- Extra Parameters: `news_api_key` (your API key to access this endpoint)
+
+**tmdb-api**
+
+- Tool Name: TMDB API
+- Tool Description: Useful for when you want to get information from The Movie Database. The input should be a question in natural language that this API can answer.
+- Notes: A natural language connection to the TMDB API (`https://api.themoviedb.org/3`), specifically the `/search/movie` endpoint.
+- Requires LLM: Yes
+- Extra Parameters: `tmdb_bearer_token` (your Bearer Token to access this endpoint - note that this is different from the API key)
+
+---
+
+## Agent Tools
+
+Tools are functions that agents can use to interact with the world.
+These tools can be generic utilities (e.g. search), other chains, or even other agents.
+
+Below are examples of supported tools
+
+**google-search**
+
+- Tool Name: Search
+- Tool Description: A wrapper around Google Search. Useful for when you need to answer questions about current events. Input should be a search query.
+- Notes: Uses the Google Custom Search API
+- Requires LLM: No
+- Extra Parameters: `google_api_key`, `google_cse_id`
+- For more information on this, see [this page](../../../ecosystem/google_search.md)
+
+**searx-search**
+
+- Tool Name: Search
+- Tool Description: A wrapper around SearxNG meta search engine. Input should be a search query. 
+- Notes: SearxNG is easy to deploy self-hosted. It is a good privacy friendly alternative to Google Search. Uses the SearxNG API. 
+- Requires LLM: No
+- Extra Parameters: `searx_host`
+
+---
+
+## Agent Tools
+
+Tools are functions that agents can use to interact with the world.
+These tools can be generic utilities (e.g. search), other chains, or even other agents.
+
+Below are examples of supported tools
+
+**google-serper**
+
+- Tool Name: Search
+- Tool Description: A low-cost Google Search API. Useful for when you need to answer questions about current events. Input should be a search query.
+- Notes: Calls the [serper.dev](https://serper.dev) Google Search API and then parses results.
+- Requires LLM: No
+- Extra Parameters: `serper_api_key`
+- For more information on this, see [this page](../../../ecosystem/google_serper.md)
+
+**wikipedia**
+
+- Tool Name: Wikipedia
+- Tool Description: A wrapper around Wikipedia. Useful for when you need to answer general questions about people, places, companies, historical events, or other subjects. Input should be a search query.
+- Notes: Uses the [wikipedia](https://pypi.org/project/wikipedia/) Python package to call the MediaWiki API and then parses results.
+- Requires LLM: No
+- Extra Parameters: `top_k_results`
+
+---
+
+## Agent Tools
+
+Tools are functions that agents can use to interact with the world.
+These tools can be generic utilities (e.g. search), other chains, or even other agents.
+
+Below are examples of supported tools
+
+**podcast-api**
+
+- Tool Name: Podcast API
+- Tool Description: Use the Listen Notes Podcast API to search all podcasts or episodes. The input should be a question in natural language that this API can answer.
+- Notes: A natural language connection to the Listen Notes Podcast API (`https://www.PodcastAPI.com`), specifically the `/search/` endpoint.
+- Requires LLM: Yes
+- Extra Parameters: `listen_api_key` (your api key to access this endpoint)
+
+**openweathermap-api**
+
+- Tool Name: OpenWeatherMap
+- Tool Description: A wrapper around OpenWeatherMap API. Useful for fetching current weather information for a specified location. Input should be a location string (e.g. London,GB).
+- Notes: A connection to the OpenWeatherMap API (https://api.openweathermap.org), specifically the `/data/2.5/weather` endpoint.
+- Requires LLM: No
+- Extra Parameters: `openweathermap_api_key` (your API key to access this endpoint)
