@@ -147,7 +147,7 @@ def select_question(q_dir: Path, markdown: bool, tutor: bool) -> str:
     """Picks a Random question from the Question Directory"""
 
     # pick a random file from directory
-    question_file_path = choice(list(q_dir.glob("*.txt")))
+    question_file_path = choice(list(q_dir.glob("*.txt")) + list(q_dir.glob("*.md")))
 
     # pick a random line from file
     question = choice(
