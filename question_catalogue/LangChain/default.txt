@@ -17,3 +17,17 @@ Yes, that is correct.
 
 ---
 
+German Covid Coding Summary:  
+
+```json
+{
+  "Positive covid diagnose": ["U07.1", "U07.2", "U99.0"],
+  "Explanations": [
+    "U07.1": "COVID-19, Virus (durch einen Labortest) nachgewiesen",
+    "U07.2": "COVID-19, Virus nicht nachgewiesen, aber die Erkrankung liegt vor.",
+    "U99.0": "Spezielle Verfahren zur Untersuchung auf SARS-CoV-2"
+  ],
+}
+
+---
+
