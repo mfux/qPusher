@@ -11,12 +11,11 @@ class qTutor:
         )
 
     def get_msg(self, card):
-
         training_messages = []
         training_messages += [
             utils.user_message(
                 """Please read the following learning card and formulate an instant message to the student based on the information you read. The goal of the message is to make the student think about the content of the learning card and learn the information from the card. You are always providing the information your asking about in your message.
-                Please use markdown for rich formatting of your message to the student. Provide only the message without any explanations.
+                Please use markdown for rich formatting of your message to the student. Provide only the message without any explanations. Start your message with a clickbait header.
                 Here is the learning card delimited by triple backticks:
         
                 ```markdown
@@ -43,7 +42,10 @@ class qTutor:
 
         training_messages += [
             utils.assistant_message(
-                """Hi there 👋,
+                """
+                # ⚡ Unleash the Power of React Prompts: Master The Secret Structure! ⚡
+
+                Hi there 👋,
                 
                 I hope your studies are going well! Today, we're discussing the structure of a React prompt.
 
@@ -86,7 +88,10 @@ class qTutor:
 
         training_messages += [
             utils.assistant_message(
-                """Hello Future Master of the Craft, 🧙‍♂️
+                """
+                # 🔥 Turn Complex Problems into Simple Solutions: Discover the Power of Chain of Thought Paradigms! 🔥
+
+                Hello Future Master of the Craft, 🧙‍♂️
 
                 Today, we'll dive into an intriguing concept called Chain of Thought (CoT) paradigms, used to enhance the reasoning capability of large language models (LLMs).
 
