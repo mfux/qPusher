@@ -121,3 +121,99 @@ Here are the agents available in LangChain.
 This agent is designed to be used in conversational settings.
 The prompt is designed to make the agent helpful and conversational.
 It uses the ReAct framework to decide which tool to use, and uses memory to remember the previous conversation interactions.
+
+---
+
+## Agent Tools
+
+Tools are functions that agents can use to interact with the world.
+These tools can be generic utilities (e.g. search), other chains, or even other agents.
+
+Below is are examples of supported tools
+
+**python_repl**
+
+- Tool Name: Python REPL
+- Tool Description: A Python shell. Use this to execute python commands. Input should be a valid python command. If you expect output it should be printed out.
+- Notes: Maintains state.
+- Requires LLM: No
+
+**serpapi**
+
+- Tool Name: Search
+- Tool Description: A search engine. Useful for when you need to answer questions about current events. Input should be a search query.
+- Notes: Calls the Serp API and then parses results.
+- Requires LLM: No
+
+---
+
+## Agent Tools
+
+Tools are functions that agents can use to interact with the world.
+These tools can be generic utilities (e.g. search), other chains, or even other agents.
+
+Below is are examples of supported tools
+
+**wolfram-alpha**
+
+- Tool Name: Wolfram Alpha
+- Tool Description: A wolfram alpha search engine. Useful for when you need to answer questions about Math, Science, Technology, Culture, Society and Everyday Life. Input should be a search query.
+- Notes: Calls the Wolfram Alpha API and then parses results.
+- Requires LLM: No
+- Extra Parameters: `wolfram_alpha_appid`: The Wolfram Alpha app id.
+
+**requests**
+
+- Tool Name: Requests
+- Tool Description: A portal to the internet. Use this when you need to get specific content from a site. Input should be a specific url, and the output will be all the text on that page.
+- Notes: Uses the Python requests module.
+- Requires LLM: No
+
+---
+
+## Agent Tools
+
+Tools are functions that agents can use to interact with the world.
+These tools can be generic utilities (e.g. search), other chains, or even other agents.
+
+Below is are examples of supported tools
+
+**wolfram-alpha**
+
+- Tool Name: Wolfram Alpha
+- Tool Description: A wolfram alpha search engine. Useful for when you need to answer questions about Math, Science, Technology, Culture, Society and Everyday Life. Input should be a search query.
+- Notes: Calls the Wolfram Alpha API and then parses results.
+- Requires LLM: No
+- Extra Parameters: `wolfram_alpha_appid`: The Wolfram Alpha app id.
+
+**requests**
+
+- Tool Name: Requests
+- Tool Description: A portal to the internet. Use this when you need to get specific content from a site. Input should be a specific url, and the output will be all the text on that page.
+- Notes: Uses the Python requests module.
+- Requires LLM: No
+
+---
+
+## Agent Tools
+
+Tools are functions that agents can use to interact with the world.
+These tools can be generic utilities (e.g. search), other chains, or even other agents.
+
+Below is are examples of supported tools
+
+**terminal**
+
+- Tool Name: Terminal
+- Tool Description: Executes commands in a terminal. Input should be valid commands, and the output will be any output from running that command.
+- Notes: Executes commands with subprocess.
+- Requires LLM: No
+
+**pal-math**
+
+- Tool Name: PAL-MATH
+- Tool Description: A language model that is excellent at solving complex word math problems. Input should be a fully worded hard word math problem.
+- Notes: Based on [this paper](https://arxiv.org/pdf/2211.10435.pdf).
+- Requires LLM: Yes
+
+---

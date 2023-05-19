@@ -166,6 +166,44 @@ def select_question(q_dir: Path, markdown: bool, tutor: bool) -> str:
     return question
 
 
+def chunk_msg(msg, max_length=512):
+    """Splits a message into chunks of max length
+
+    Args:
+        msg (str): message to split
+        max_length (int, optional): max length of each chunk. Defaults to 1024.
+
+    Returns:
+        iterator: iterator over chunks
+    """
+
+    # initialize chunks
+    chunks = []
+    # split question into multiple pushs if length exceeds max length
+    if len(msg) > max_length:
+        # tokenize question
+        tokens = msg.split("\n")
+        print(tokens)
+        # initialize chunk
+        chunk = ""
+        # iterate over tokens
+        for token in tokens:
+            # if chunk is too long
+            if len(chunk) + len(token) > max_length:
+                # push chunk
+                chunks.append(chunk)
+                # reset chunk
+                chunk = ""
+            # add token to chunk
+            chunk += token + "\n"
+        # push last chunk
+        chunks.append(chunk)
+    # if message is short enough
+    else:
+        chunks.append(msg)
+    return reversed(chunks)
+
+
 def run(args):
     # schedule first push
     next_push = schedule_push(args, berlin_now())
@@ -185,11 +223,20 @@ def run(args):
                 question = select_question(
                     args.QUESTIONS_DIR, args.markdown, args.tutor
                 )
-                # push the question
-                try:
-                    push(question, args.APP_TOKEN, args.USER_KEY)
-                except Exception as e:
-                    logging.error(f"Push failed: {e}")
+
+                # push each chunk
+                chunks = chunk_msg(question)
+                for chunk in chunks:
+                    try:
+                        push(chunk, args.APP_TOKEN, args.USER_KEY)
+                    except Exception as e:
+                        logging.error(f"Push failed: {e}")
+                    sleep(1)
+
+                # schedule next push
+                next_push = schedule_push(args, berlin_now())
+
+                # calculate time to sleep
                 # schedule next push
                 next_push = schedule_push(args, berlin_now())
 
