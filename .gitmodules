@@ -1,0 +1,3 @@
+[submodule "Dialogue-Driven-Objects"]
+	path = Dialogue-Driven-Objects
+	url = git@github.com:mfux/Dialogue-Driven-Objects.git

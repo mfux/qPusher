@@ -11,6 +11,7 @@ from random import choice
 from time import sleep
 from random import randint
 import markdown
+from qPusher.qTutor import qTutor
 
 
 def parse_args(argv: list) -> argparse.Namespace:
@@ -66,6 +67,14 @@ def parse_args(argv: list) -> argparse.Namespace:
     parser.add_argument(
         "--markdown",
         help="converts the question to markdown",
+        type=bool,
+        required=False,
+        default=False,
+    )
+
+    parser.add_argument(
+        "--tutor",
+        help="tutor mode",
         type=bool,
         required=False,
         default=False,
@@ -134,7 +143,7 @@ def schedule_push(args: argparse.Namespace, last_push: dt) -> dt:
     return next_push
 
 
-def select_question(q_dir: Path, markdown: bool) -> str:
+def select_question(q_dir: Path, markdown: bool, tutor: bool) -> str:
     """Picks a Random question from the Question Directory"""
 
     # pick a random file from directory
@@ -148,6 +157,11 @@ def select_question(q_dir: Path, markdown: bool) -> str:
         question = choice(
             [q.strip() for q in question_file_path.read_text().split("---") if q]
         )
+
+    if tutor:
+
+        tutor = qTutor()
+        question = tutor.get_msg(question)
 
     return question
 
@@ -168,7 +182,9 @@ def run(args):
                 and time_is_appropriate(args.BEGIN, args.END, berlin_now())
             ) or first_run:
                 # select a question
-                question = select_question(args.QUESTIONS_DIR, args.markdown)
+                question = select_question(
+                    args.QUESTIONS_DIR, args.markdown, args.tutor
+                )
                 # push the question
                 try:
                     push(question, args.APP_TOKEN, args.USER_KEY)
