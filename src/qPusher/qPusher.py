@@ -134,7 +134,7 @@ def schedule_push(args: argparse.Namespace, last_push: dt) -> dt:
     return next_push
 
 
-def select_question(q_dir: Path, bool: markdown) -> str:
+def select_question(q_dir: Path, markdown: bool) -> str:
     """Picks a Random question from the Question Directory"""
 
     # pick a random file from directory
