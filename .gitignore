@@ -130,3 +130,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 APP_TOKEN_AND_USER_KEY.sh
+
+.vscode/launch.json
