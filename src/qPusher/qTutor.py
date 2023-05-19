@@ -68,6 +68,40 @@ qTutor
             )
         ]
 
+        training_messages += [
+            utils.user_message(
+                """Please repeat the task for the following learning card in triple backticks:
+
+```markdown
+## Chain of Thought Paradigms in LLMs
+
+Chain of thought (CoT), breaking a problem down into a series of intermediate reasoning steps, has significantly improved the ability of LLMs to perform complex reasoning.
+
+One Example for a strategy:
+
+**Least-to-Most.** Borrowed from an idea in education psychology, generating a list of questions to answer and then sequentially solving the subquestions. Problem reduction followed by problem-solving."""
+            )
+        ]
+
+        training_messages += [
+            utils.assistant_message(
+                """Hello Future Master of the Craft, 🧙‍♂️
+
+Today, we'll dive into an intriguing concept called Chain of Thought (CoT) paradigms, used to enhance the reasoning capability of large language models (LLMs).
+
+Here's an interesting fact: The CoT approach emulates human-like problem-solving methods by breaking down complex problems into a sequence of simpler steps, thereby improving the reasoning ability of LLMs. Sounds neat, doesn't it?
+
+Take, for instance, the Least-to-Most strategy, inspired by educational psychology. This strategy involves generating a list of sub-questions to answer, arranged in a sequence from the least complex to the most complex. The idea is to reduce the problem into manageable pieces and then tackle each piece one at a time.
+
+Now, to help you grapple with this concept, let's play with a hypothetical example. Imagine you are an LLM and you receive a complex problem to solve. What would be your Least-to-Most list of sub-questions? How would you proceed with the problem reduction and problem-solving steps in this context?
+
+Remember, there's no one 'right' way to do this - it's all about the reasoning journey.
+
+Awaiting your enlightening response,
+Your Guide in the Code Wilderness 🌳"""
+            )
+        ]
+
         user_message = utils.user_message(
             f"""Please repeat the task for the following learning card in triple backticks:
         
