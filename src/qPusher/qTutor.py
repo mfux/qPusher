@@ -120,7 +120,13 @@ class qTutor:
 
         messages = [self.system_prompt] + training_messages + [user_message]
 
-        result = utils.call_api(messages, temperature=0.5)
+        try:
+            result = utils.call_api(messages, temperature=0.5)
+        except Exception as e:
+            print(e)
+            result = f"""# ⚠️ Error ⚠️ 
+            {e}
+            """
 
         return result
 

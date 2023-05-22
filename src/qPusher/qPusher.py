@@ -146,20 +146,22 @@ def schedule_push(args: argparse.Namespace, last_push: dt) -> dt:
 def select_question(q_dir: Path, markdown: bool, tutor: bool) -> str:
     """Picks a Random question from the Question Directory"""
 
-    # pick a random file from directory
-    question_file_path = choice(list(q_dir.glob("*.txt")) + list(q_dir.glob("*.md")))
+    # pick a random question card from a random file in the question directory
+    def cards(q_dir: Path):
+        # collect all cards from all txt files
+        cards = []
+        for file in q_dir.glob("*.txt"):
+            cards += [q.strip() for q in file.read_text().split("\n\n") if q]
+        # collect markdown cards
+        for file in q_dir.glob("*.md"):
+            cards += [q.strip() for q in file.read_text().split("\n---\n") if q]
+        return cards
 
-    # pick a random line from file
-    question = choice(
-        [q.strip() for q in question_file_path.read_text().split("\n\n") if q]
-    )
-    if markdown:
-        question = choice(
-            [q.strip() for q in question_file_path.read_text().split("---") if q]
-        )
+    # pick a random card
+    question = choice(cards(q_dir))
 
+    # let tutor process the card and construct a message from it
     if tutor:
-
         tutor = qTutor()
         question = tutor.get_msg(question)
 
